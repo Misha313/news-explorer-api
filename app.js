@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+const { createUser } = require('./controllers/users')
+
 const { PORT = 3000 } = process.env;
 
 const articleRouter = require('./routes/articles');
@@ -15,6 +17,8 @@ mongoose.connect('mongodb://localhost:27017/explorer', {
   useCreateIndex: true,
   useFindAndModify: false,
 });
+
+app.post('/signup', createUser);
 
 app.use('/', articleRouter);
 
