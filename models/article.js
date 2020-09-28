@@ -38,11 +38,11 @@ const articleSchema = new mongoose.Schema({
       message: 'Неверный формат ссылки',
     },
   },
-  owner: {
-    required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    select: false,
-  },
+  // owner: {
+  //   required: true,
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   select: false,
+  // },
 });
 
 module.exports = mongoose.model('article', articleSchema);
