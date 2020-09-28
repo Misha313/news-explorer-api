@@ -8,6 +8,9 @@ module.exports.createUser = (req, res) => {
       password: hash,
       name: req.body.name,
     }))
-    .then((user) => res.send(user))
+    .then((user) => res.send({
+      name: user.name,
+      email: user.email,
+    }))
     .catch((err) => res.status(400).send(err.message));
 };
