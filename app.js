@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-const { createUser } = require('./controllers/users')
+const { createUser, login } = require('./controllers/users')
 
 const { PORT = 3000 } = process.env;
 
@@ -19,6 +19,7 @@ mongoose.connect('mongodb://localhost:27017/explorer', {
 });
 
 app.post('/signup', createUser);
+app.post('/signin', login);
 
 app.use('/', articleRouter);
 

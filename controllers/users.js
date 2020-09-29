@@ -14,3 +14,23 @@ module.exports.createUser = (req, res) => {
     }))
     .catch((err) => res.status(400).send(err.message));
 };
+
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+  User.findOne({ email }).select('+password')
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+      return bcrypt.compare(password, user.password);
+    })
+    .then((matched) => {
+      if (!matched) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+      res.send({ message: 'Всё верно!' });
+    })
+    .catch((err) => {
+      res.status(401).send({ message: err.message });
+    });
+};
