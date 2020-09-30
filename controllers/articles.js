@@ -2,7 +2,7 @@ const Article = require('../models/article');
 
 module.exports.createArticle = (req, res, next) => {
   const { keyword, title, text, date, source, link, image } = req.body;
-  Article.create({ keyword, title, text, date, source, link, image })
+  Article.create({ keyword, title, text, date, source, owner: req.user._id, link, image })
     .then((article) => res.send(article))
     .catch((err) => {
       res.status(500).send({ message: err.message });
