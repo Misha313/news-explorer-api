@@ -7,10 +7,10 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 module.exports.showMyInfo = (req, res, next) => {
   User.findById({ _id: req.user._id })
     .then((user) => res.status(200).send({ email: user.email, name: user.name }))
-    .catch((err) => res.status(400).send(err.message));
+    .catch(next);
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
       email: req.body.email,
@@ -22,17 +22,19 @@ module.exports.createUser = (req, res) => {
       name: user.name,
       email: user.email,
     }))
-    .catch((err) => res.status(400).send(err.message));
+    .catch(next);
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key');
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        { expiresIn: '7d' },
+      );
       res.send({ token });
     })
-    .catch((err) => {
-      res.status(401).send({ message: err.message });
-    });
+    .catch(next);
 };

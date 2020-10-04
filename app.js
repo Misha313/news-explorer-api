@@ -1,23 +1,23 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-const { createUser, login, showMyInfo } = require('./controllers/users');
-const { getArticles } = require('./controllers/articles');
+const { errors } = require('celebrate');
+
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { errorMiddleware } = require('./middlewares/error');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, NODE_ENV, DATABASE_LINK } = process.env;
 
-const articleRouter = require('./routes/articles');
-const userRouter = require('./routes/user');
-const auth = require('./middlewares/auth');
+const router = require('./routes/index');
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/explorer', {
+mongoose.connect(NODE_ENV === 'production' ? DATABASE_LINK : 'mongodb://localhost:27017/explorer', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -25,20 +25,13 @@ mongoose.connect('mongodb://localhost:27017/explorer', {
 
 app.use(requestLogger);
 
-app.post('/signup', createUser);
-app.post('/signin', login);
-
-app.use(auth);
-
-app.use('/users/me', showMyInfo);
-app.use('/articles', getArticles);
-app.use('/', articleRouter);
-
-app.get('/', (req, res) => {
-  res.send('запрашиваеммый ресурс не найден');
-});
+app.use(router);
 
 app.use(errorLogger);
+
+app.use(errors);
+
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`); // eslint-disable-line

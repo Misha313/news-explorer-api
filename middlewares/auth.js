@@ -1,25 +1,21 @@
-const { JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 const jwt = require('jsonwebtoken');
+const Unauthorized = require('../errors/unauthorized');
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-  // console.log(req.headers);
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация( Не пришел токен)' });
+    throw new Unauthorized('Необходима авторизация');
   }
   const token = authorization.replace('Bearer ', '');
 
   let payload;
 
   try {
-    payload = jwt.verify(token, 'some-secret-key');
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
     req.user = payload;
   } catch (err) {
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизаци1я' });
+    throw new Unauthorized('Необходима авторизация');
   }
 
   next();

@@ -1,4 +1,5 @@
 const Article = require('../models/article');
+const NotFoundError = require('../errors/not-found-err');
 
 module.exports.createArticle = (req, res, next) => {
   const {
@@ -22,17 +23,13 @@ module.exports.createArticle = (req, res, next) => {
     owner,
   })
     .then((article) => res.send(article))
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
+    .catch(next);
 };
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({ owner: req.user._id })
     .then((articles) => res.status(200).send({ data: articles }))
-    .catch((err) => {
-      res.status(404).send({ message: err.message });
-    });
+    .catch(next);
 };
 
 module.exports.deleteArticleById = (req, res, next) => {
@@ -40,16 +37,9 @@ module.exports.deleteArticleById = (req, res, next) => {
   Article.findByIdAndRemove(articleId)
     .then((article) => {
       if (!article) {
-        res.status(400).send({ message: 'Карточка с данным ID не найдена' });
-        return;
+        throw new NotFoundError('статья с данным id не найдена');
       }
       res.status(200).send({ data: article });
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: err.message });
-        return;
-      }
-      res.status(500).send({ message: err });
-    });
+    .catch(next);
 };
