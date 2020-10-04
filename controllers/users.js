@@ -27,6 +27,9 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
+  if (!password) {
+    throw new Error('ведите пароль');
+  }
   User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign(

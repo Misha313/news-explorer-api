@@ -13,7 +13,7 @@ const createUserCheck = celebrate({
 
 const createArticleCheck = celebrate({
   body: Joi.object().keys({
-    keyword: Joi.string().required(),
+    keyword: Joi.string().required().error(new NotValid('Поле link должно содержать ссылку')),
     title: Joi.string().required(),
     text: Joi.string().required(),
     date: Joi.date().required(),
