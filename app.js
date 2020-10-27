@@ -29,7 +29,7 @@ app.use(cors({
   optionsSuccessStatus: 200,
   credentials: true,
 }));
-app.options('http://localhost:8080', cors());
+app.options('http://localhost:8081', cors());
 
 app.use(requestLogger);
 
