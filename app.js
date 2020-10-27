@@ -33,7 +33,7 @@ app.options('http://localhost:8080', cors());
 
 app.use(requestLogger);
 
-app.use(router);
+app.use(router, cors());
 
 app.use(errorLogger);
 
