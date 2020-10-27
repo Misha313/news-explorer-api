@@ -4,6 +4,12 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+const corsOptions = {
+  origin: 'http://localhost:8080',
+  optionsSuccessStatus: 200,
+  credentials: true,
+};
+
 const { errors } = require('celebrate');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -14,8 +20,8 @@ const { PORT = 3000, NODE_ENV, DATABASE_LINK } = process.env;
 const router = require('./routes/index');
 
 const app = express();
-app.use(cors());
-app.options('*', cors());
+app.use(cors(corsOptions));
+// app.options('*', cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
