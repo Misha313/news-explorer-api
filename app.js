@@ -26,6 +26,7 @@ mongoose.connect(NODE_ENV === 'production' ? DATABASE_LINK : 'mongodb://localhos
 
 app.use(cors({
   origin: 'http://localhost:8080',
+  optionsSuccessStatus: 200,
   credentials: true,
 }));
 
