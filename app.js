@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
@@ -13,6 +14,7 @@ const { PORT = 3000, NODE_ENV, DATABASE_LINK } = process.env;
 const router = require('./routes/index');
 
 const app = express();
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,7 +31,7 @@ app.use(router);
 
 app.use(errorLogger);
 
-// app.use(errors);
+app.use(errors());
 
 app.use(errorMiddleware);
 

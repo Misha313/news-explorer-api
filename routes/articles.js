@@ -4,7 +4,7 @@ const auth = require('../middlewares/auth');
 const { createArticleCheck, articleIdCheck } = require('../middlewares/validation');
 
 articleRouter.post('/articles', createArticleCheck, auth, createArticle);
-articleRouter.delete('/articles/:articleId', auth, deleteArticleById);
-articleRouter.get('/articles', articleIdCheck, auth, getArticles);
+articleRouter.delete('/articles/:articleId', articleIdCheck, auth, deleteArticleById);
+articleRouter.get('/articles', auth, getArticles);
 
 module.exports = articleRouter;

@@ -40,7 +40,7 @@ const loginCheck = celebrate({
 
 const articleIdCheck = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.objectId(),
+    articleId: Joi.objectId(),
   }),
 });
 
