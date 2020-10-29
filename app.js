@@ -32,8 +32,8 @@ mongoose.connect(NODE_ENV === 'production' ? DATABASE_LINK : 'mongodb://localhos
 //   next();
 // });
 
-app.get('/test', () => {
-  console.log('test successfully');
+app.get('/test', (req, res) => {
+  res.send({ msg: 'test successfully' });
 });
 
 app.use(requestLogger);
