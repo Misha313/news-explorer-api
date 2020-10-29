@@ -32,7 +32,7 @@ mongoose.connect(NODE_ENV === 'production' ? DATABASE_LINK : 'mongodb://localhos
 //   next();
 // });
 
-app.use('/test', () => {
+app.get('/test', () => {
   console.log('test successfully');
 });
 
